@@ -1,2 +1,2 @@
-# Cobblemon-Template
-Template for Fabric addon mods for Cobblemon
+# Cobble Announcer
+Cobblemon sidemod that announces the capture of special Pokemon.
