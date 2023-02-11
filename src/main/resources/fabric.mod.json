@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "cobbleannouncer",
   "version": "${version}",
-  "name": "ExampleMod",
-  "description": "Template for Cobblemon addon development",
+  "name": "CobbleAnnouncer",
+  "description": "Chat announcer for Cobblemon",
   "authors": [
     "Reyn"
   ],
   "contact": {
-    "repo": "https://github.com/DotReyn/Cobblemon-Template"
+    "repo": "https://github.com/DotReyn/CobbleAnnouncer"
   },
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.example.examplemod.ExampleMod"
+      "dot.reyn.cobbleannouncer.CobbleAnnouncer"
     ]
   },
   "mixins": [

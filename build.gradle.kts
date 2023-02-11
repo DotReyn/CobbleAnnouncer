@@ -15,6 +15,7 @@ repositories {
             includeGroup("curse.maven")
         }
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -22,10 +23,12 @@ dependencies {
     mappings("net.fabricmc:yarn:${property("yarn_mappings")}")
     modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
 
-    //modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
 
     modImplementation("curse.maven:cobblemon-687131:${property("cobblemon_curse_file_id")}")
+
+    modImplementation(include("net.kyori:adventure-platform-fabric:5.5.1")!!)
+    modImplementation(include("dev.vankka:enhancedlegacytext:1.0.0")!!)
 }
 
 tasks {
