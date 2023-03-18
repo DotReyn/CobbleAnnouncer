@@ -1,7 +1,6 @@
 package dot.reyn.cobbleannouncer.config
 
 import com.cobblemon.mod.common.pokemon.Pokemon
-import dot.reyn.cobbleannouncer.extensions.smallCaps
 
 /**
  * Adjective token object for announcing context.
@@ -10,18 +9,13 @@ data class AdjectiveToken(
     val enabled: Boolean,
     val criteria: Map<String, List<String>>,
     val adjective: String,
-    val smallCaps: Boolean,
     val overrideMessage: AnnouncerMessage? = null
 ) {
     /**
      * Returns the adjective with formatting.
      */
     fun getText(): String {
-        return if (this.smallCaps) {
-            this.adjective.lowercase().smallCaps()
-        } else {
-            this.adjective
-        }
+        return this.adjective
     }
 
     /**

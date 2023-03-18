@@ -3,10 +3,9 @@ package dot.reyn.cobbleannouncer.config
 import com.cobblemon.mod.common.api.pokemon.labels.CobblemonPokemonLabels
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
-import dev.vankka.enhancedlegacytext.EnhancedLegacyText
-import dot.reyn.cobbleannouncer.extensions.smallCaps
-import net.kyori.adventure.text.Component
+import eu.pb4.placeholders.api.TextParserUtils
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
 
 /**
  * Configuration for the announcer.
@@ -15,32 +14,29 @@ data class AnnouncerConfig(
     val tokens: List<AdjectiveToken> = listOf(
         AdjectiveToken(
             enabled = true,
-            smallCaps = true,
             criteria = mapOf(
                 "aspect" to listOf(SHINY_ASPECT.aspect),
             ),
-            adjective = "&#ef9f76⭐ &#e5c890Shiny &#ef9f76⭐",
+            adjective = "<color:#ef9f76>⭐ <color:#e5c890>sʜɪɴʏ</color> ⭐</color>",
         ),
         AdjectiveToken(
             enabled = true,
-            smallCaps = true,
             criteria = mapOf(
                 "label" to listOf(CobblemonPokemonLabels.LEGENDARY)
             ),
-            adjective = "&#e78284♦ &#ea999cLegendary &#e78284♦",
+            adjective = "<color:#e78284>♦ <color:#ea999c>ʟᴇɢᴇɴᴅᴀʀʏ</color> ♦</color>",
         )
     ),
 
     val baseMessage: AnnouncerMessage = AnnouncerMessage(
         enabled = true,
-        smallCaps = false,
-        message = "&#414559(&#eebebe!&#414559) &#a6d189%player% &#c6d0f5has caught a %adjectives% %pokemon%&#c6d0f5!",
+        message = "<color:#414559>(<color:#eebebe>!</color>)</color> <color:#a6d189>%player%</color> <color:#c6d0f5>has caught a %adjectives% %pokemon%</color><color:#c6d0f5>!</color>",
     )
 ) {
     /**
      * Returns the message to send to the player.
      */
-    fun getMessage(player: ServerPlayerEntity, pokemon: Pokemon, tokens: List<AdjectiveToken>): Component {
+    fun getMessage(player: ServerPlayerEntity, pokemon: Pokemon, tokens: List<AdjectiveToken>): Text {
         val token = tokens.firstOrNull { it.overrideMessage != null }
         val announcerMessage = token?.overrideMessage ?: this.baseMessage
         var text = announcerMessage.message
@@ -52,12 +48,7 @@ data class AnnouncerConfig(
         // Adjective placeholders
         val adjectives = tokens.joinToString(" ") { it.getText() }
         text = text.replace("%adjectives%", adjectives)
-
-        return if (announcerMessage.smallCaps) {
-            EnhancedLegacyText.get().buildComponent(text.lowercase().smallCaps()).build()
-        } else {
-            EnhancedLegacyText.get().buildComponent(text).build()
-        }
+        return TextParserUtils.formatNodes(text).toText()
     }
 
     /**

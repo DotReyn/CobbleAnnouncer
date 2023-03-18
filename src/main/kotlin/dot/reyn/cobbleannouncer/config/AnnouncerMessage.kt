@@ -5,6 +5,5 @@ package dot.reyn.cobbleannouncer.config
  */
 data class AnnouncerMessage(
     val enabled: Boolean,
-    val smallCaps: Boolean,
     val message: String,
 )

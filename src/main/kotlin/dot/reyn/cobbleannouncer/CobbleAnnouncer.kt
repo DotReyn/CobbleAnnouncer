@@ -1,12 +1,10 @@
 package dot.reyn.cobbleannouncer
 
 import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dot.reyn.cobbleannouncer.config.AnnouncerConfig
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
-import net.kyori.adventure.platform.fabric.FabricServerAudiences
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
@@ -16,7 +14,6 @@ import java.io.FileWriter
  */
 class CobbleAnnouncer : ModInitializer {
 
-    private var platform: FabricServerAudiences? = null
     private lateinit var config: AnnouncerConfig
 
     /**
@@ -25,22 +22,18 @@ class CobbleAnnouncer : ModInitializer {
     override fun onInitialize() {
         this.loadConfig()
 
-        ServerLifecycleEvents.SERVER_STARTING.register { this.platform = FabricServerAudiences.of(it) }
-        ServerLifecycleEvents.SERVER_STOPPED.register { this.platform = null }
-        ServerLifecycleEvents.START_DATA_PACK_RELOAD.register { _, _, -> this.loadConfig() }
+        ServerLifecycleEvents.START_DATA_PACK_RELOAD.register { _, _ -> this.loadConfig() }
 
         CobblemonEvents.POKEMON_CAPTURED.subscribe { event ->
-            if (this.platform == null) {
-                return@subscribe
-            }
-
             val tokens = this.config.getEligibleTokens(event.pokemon)
             if (tokens.isEmpty()) {
                 return@subscribe
             }
 
             val message = this.config.getMessage(event.player, event.pokemon, tokens)
-            this.platform!!.players().sendMessage(message)
+            event.player.server.playerManager.playerList.forEach { player ->
+                player.sendMessage(message, false)
+            }
         }
     }
 
